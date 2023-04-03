@@ -1,20 +1,52 @@
 #!/usr/bin/python3
+# 101-nqueens.py
+"""Program to solve the N queens puzzle challenge"""
 
-import sys
-if len(sys.argv) is 1:
-    print("Usage: nqueens N")
-    exit(1)
-if not sys.argv[1].isdigit():
-    print("N must be a number")
-    exit(1)
-if int(sys.argv[1]) < 4:
-    print("N must be at least 4")
-    exit(1)
-if int(sys.argv[1]) is 4:
-    print("[[0, 1], [1, 3], [2, 0], [3, 2]]")
-    print("[[0, 2], [1, 0], [2, 3], [3, 1]]")
-if int(sys.argv[1]) is 6:
-    print("[[0, 1], [1, 3], [2, 5], [3, 0], [4, 2], [5, 4]]")
-    print("[[0, 2], [1, 5], [2, 1], [3, 4], [4, 0], [5, 3]]")
-    print("[[0, 3], [1, 0], [2, 4], [3, 1], [4, 5], [5, 2]]")
-    print("[[0, 4], [1, 2], [2, 0], [3, 5], [4, 3], [5, 1]]")
+
+def isSafe(board, row, col):
+    '''Checks if position is safe from attack.
+    Args:
+        board: The board state.
+        row: The row to check.
+        col: The column to check.
+    '''
+    for c in range(col):
+        if board[c] is row or abs(board[c] - row) is abs(c - col):
+            return False
+    return True
+
+
+def checkBoard(board, col):
+    '''Checks the board state column by column using backtracking.
+    Args:
+        board: The board state.
+        col: The current colum to check.
+    '''
+    n = len(board)
+    if col is n:
+        print(str([[c, board[c]] for c in range(n)]))
+        return
+
+    for row in range(n):
+        if isSafe(board, row, col):
+            board[col] = row
+            checkBoard(board, col + 1)
+
+
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) != 2:
+        print("Usage: nqueens N")
+        sys.exit(1)
+    n = 0
+    try:
+        n = int(sys.argv[1])
+    except:
+        print("N must be a number")
+        sys.exit(1)
+    if n < 4:
+        print("N must be at least 4")
+        sys.exit(1)
+    board = [0 for col in range(n)]
+    checkBoard(board, 0)
